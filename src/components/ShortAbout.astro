@@ -1,0 +1,42 @@
+---
+import { masters } from "../data/content";
+import DecorativeWave from "./DecorativeWave.astro";
+---
+
+<section class="bg-sand/40" aria-labelledby="about-heading">
+  <DecorativeWave />
+  <div class="mx-auto grid max-w-7xl gap-12 px-5 py-16 sm:px-8 lg:grid-cols-12 lg:gap-16 lg:py-24">
+    <div class="lg:col-span-6">
+      <p class="mb-4 text-xs tracking-[0.36em] text-sage-deep uppercase">Философия</p>
+      <h2 id="about-heading" class="font-serif text-4xl tracking-wide text-forest sm:text-5xl">
+        Натуральность как стандарт, а не декорация
+      </h2>
+      <p class="mt-6 text-base leading-relaxed font-light text-taupe-muted">
+        Мы не обещаем «новую жизнь за час». Мы даём точную работу рук, чистые составы и сервис,
+        в котором тишина — часть протокола: приглушённый свет, тёплые камни, мастера с международной
+        квалификацией и временем, которое нельзя ужать.
+      </p>
+      <a
+        href="/about"
+        class="mt-8 inline-flex text-sm tracking-[0.18em] text-forest uppercase transition-all duration-300 hover:text-sage-deep"
+      >
+        О салоне и мастерах
+      </a>
+    </div>
+    <ul class="grid gap-4 sm:grid-cols-3 lg:col-span-6">
+      {
+        masters.map((master) => (
+          <li>
+            <article class="h-full rounded-2xl border border-taupe/10 bg-cream p-5 transition-all duration-300 hover:border-sage/40">
+              <div class="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-sage/20 font-serif text-xl text-forest">
+                {master.name.split(" ").map((part) => part[0]).join("")}
+              </div>
+              <h3 class="font-serif text-lg text-forest">{master.name}</h3>
+              <p class="mt-1 text-xs tracking-wide text-taupe-muted">{master.role}</p>
+            </article>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

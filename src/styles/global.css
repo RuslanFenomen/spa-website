@@ -4,13 +4,13 @@
   --font-serif: "Cormorant Garamond", "Times New Roman", serif;
   --font-sans: "Outfit", "Segoe UI", sans-serif;
 
-  --color-cream: #f6f1ea;
-  --color-sand: #d8cbb8;
-  --color-sand-deep: #c4b39a;
-  --color-sage: #8b9a7d;
-  --color-sage-deep: #6f7f64;
-  --color-slate: #2f3634;
-  --color-slate-muted: #5c6562;
+  --color-sage: #8a9a86;
+  --color-sage-deep: #6f7d6b;
+  --color-cream: #f5f2eb;
+  --color-sand: #e4ddd0;
+  --color-taupe: #4a443f;
+  --color-taupe-muted: #7a736c;
+  --color-forest: #2c362b;
 }
 
 html {
@@ -18,5 +18,62 @@ html {
 }
 
 body {
-  @apply bg-cream font-sans text-slate antialiased;
+  @apply bg-cream font-sans text-taupe antialiased;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-sage) 40%, transparent);
+}
+
+@keyframes leaf-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(-4deg);
+  }
+  50% {
+    transform: translate3d(8px, -12px, 0) rotate(6deg);
+  }
+}
+
+@keyframes wave-shift {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.animate-leaf {
+  animation: leaf-drift 9s ease-in-out infinite;
+}
+
+.animate-wave {
+  animation: wave-shift 18s linear infinite;
+}
+
+.animate-glow {
+  animation: glow-pulse 6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .animate-leaf,
+  .animate-wave,
+  .animate-glow {
+    animation: none;
+  }
 }

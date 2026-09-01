@@ -1,0 +1,185 @@
+---
+import { bookingServices } from "../data/content";
+
+interface Props {
+  idPrefix?: string;
+}
+
+const { idPrefix = "booking" } = Astro.props;
+---
+
+<form class="booking-form space-y-5" novalidate>
+  <div class="grid gap-5 sm:grid-cols-2">
+    <div>
+      <label class="mb-2 block text-xs tracking-[0.18em] text-taupe-muted uppercase" for={`${idPrefix}-name`}>
+        Имя
+      </label>
+      <input
+        id={`${idPrefix}-name`}
+        name="name"
+        type="text"
+        required
+        autocomplete="name"
+        minlength="2"
+        class="w-full border border-taupe/15 bg-cream px-4 py-3 text-sm outline-none transition-all duration-300 focus:border-sage"
+      />
+    </div>
+    <div>
+      <label class="mb-2 block text-xs tracking-[0.18em] text-taupe-muted uppercase" for={`${idPrefix}-phone`}>
+        Телефон
+      </label>
+      <input
+        id={`${idPrefix}-phone`}
+        name="phone"
+        type="tel"
+        required
+        autocomplete="tel"
+        inputmode="tel"
+        placeholder="+7 (900) 000-00-00"
+        class="w-full border border-taupe/15 bg-cream px-4 py-3 text-sm outline-none transition-all duration-300 focus:border-sage"
+      />
+    </div>
+  </div>
+
+  <fieldset>
+    <legend class="mb-3 text-xs tracking-[0.18em] text-taupe-muted uppercase">Услуга</legend>
+    <div class="grid gap-2 sm:grid-cols-2">
+      {
+        bookingServices.map((service, index) => (
+          <label class="flex cursor-pointer items-center gap-3 border border-taupe/10 bg-cream px-4 py-3 text-sm transition-all duration-300 has-[:checked]:border-sage has-[:checked]:bg-sage/10">
+            <input
+              type="radio"
+              name="service"
+              value={service}
+              required
+              class="accent-sage"
+              checked={index === 0}
+            />
+            {service}
+          </label>
+        ))
+      }
+    </div>
+  </fieldset>
+
+  <div>
+    <label class="mb-2 block text-xs tracking-[0.18em] text-taupe-muted uppercase" for={`${idPrefix}-datetime`}>
+      Удобные дата и время
+    </label>
+    <input
+      id={`${idPrefix}-datetime`}
+      name="datetime"
+      type="datetime-local"
+      required
+      class="w-full border border-taupe/15 bg-cream px-4 py-3 text-sm outline-none transition-all duration-300 focus:border-sage"
+    />
+  </div>
+
+  <div>
+    <label class="mb-2 block text-xs tracking-[0.18em] text-taupe-muted uppercase" for={`${idPrefix}-comment`}>
+      Комментарий / пожелания
+    </label>
+    <textarea
+      id={`${idPrefix}-comment`}
+      name="comment"
+      rows="3"
+      class="w-full border border-taupe/15 bg-cream px-4 py-3 text-sm outline-none transition-all duration-300 focus:border-sage"
+    ></textarea>
+  </div>
+
+  <input type="text" name="website" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
+
+  <button
+    type="submit"
+    class="inline-flex w-full items-center justify-center gap-2 bg-forest px-6 py-3.5 text-sm tracking-[0.18em] text-cream uppercase transition-all duration-300 hover:bg-taupe disabled:opacity-60"
+  >
+    <span data-label>Отправить заявку</span>
+    <span data-spinner class="hidden h-4 w-4 animate-spin rounded-full border border-cream/30 border-t-cream"></span>
+  </button>
+  <p data-status class="min-h-6 text-sm" role="status"></p>
+</form>
+
+<script>
+  const phonePattern = /^(\+7|7|8)?[\s\-]?\(?\d{3}\)?[\s\-]?\d{3}[\s\-]?\d{2}[\s\-]?\d{2}$/;
+
+  function setStatus(form: HTMLFormElement, message: string, tone: "ok" | "err" | "wait") {
+    const status = form.querySelector("[data-status]") as HTMLElement | null;
+    if (!status) return;
+    status.textContent = message;
+    status.className =
+      tone === "ok"
+        ? "min-h-6 text-sm text-sage-deep"
+        : tone === "err"
+          ? "min-h-6 text-sm text-[#7a3d36]"
+          : "min-h-6 text-sm text-taupe-muted";
+  }
+
+  document.querySelectorAll(".booking-form").forEach((node) => {
+    const form = node as HTMLFormElement;
+    if (form.dataset.bound === "true") return;
+    form.dataset.bound = "true";
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const submit = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+      const label = form.querySelector("[data-label]");
+      const spinner = form.querySelector("[data-spinner]");
+      const data = new FormData(form);
+      const name = String(data.get("name") ?? "").trim();
+      const phone = String(data.get("phone") ?? "").trim();
+      const service = String(data.get("service") ?? "").trim();
+      const datetime = String(data.get("datetime") ?? "").trim();
+      const comment = String(data.get("comment") ?? "").trim();
+      const website = String(data.get("website") ?? "");
+
+      if (name.length < 2) {
+        setStatus(form, "Укажите имя — не короче двух букв.", "err");
+        return;
+      }
+      if (!phonePattern.test(phone.replace(/\s/g, ""))) {
+        setStatus(form, "Проверьте телефон: формат +7 (900) 000-00-00.", "err");
+        return;
+      }
+
+      submit.disabled = true;
+      label?.classList.add("hidden");
+      spinner?.classList.remove("hidden");
+      setStatus(form, "Отправляем заявку…", "wait");
+
+      try {
+        const response = await fetch("/api/telegram", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            type: "booking",
+            name,
+            phone,
+            service,
+            datetime,
+            comment,
+            website,
+          }),
+        });
+        const payload = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          throw new Error(payload.error || "request_failed");
+        }
+        setStatus(
+          form,
+          "Ваша заявка принята, мы свяжемся с вами в течение 15 минут.",
+          "ok",
+        );
+        form.reset();
+      } catch {
+        setStatus(
+          form,
+          "Не удалось отправить заявку. Позвоните нам или попробуйте ещё раз.",
+          "err",
+        );
+      } finally {
+        submit.disabled = false;
+        label?.classList.remove("hidden");
+        spinner?.classList.add("hidden");
+      }
+    });
+  });
+</script>

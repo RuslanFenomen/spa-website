@@ -1,0 +1,41 @@
+---
+import Gift from "@lucide/astro/icons/gift";
+---
+
+<section class="px-5 py-20 sm:px-8" aria-labelledby="gift-heading">
+  <div class="mx-auto max-w-7xl">
+    <article
+      class="relative overflow-hidden rounded-3xl border border-sage/25 bg-forest px-6 py-12 text-cream sm:px-12 lg:flex lg:items-center lg:justify-between lg:py-16"
+    >
+      <div
+        class="animate-glow pointer-events-none absolute -right-10 -bottom-16 h-64 w-64 rounded-full bg-sage/30 blur-3xl"
+        aria-hidden="true"
+      >
+      </div>
+      <div class="relative max-w-xl">
+        <p class="mb-4 inline-flex items-center gap-2 text-xs tracking-[0.3em] text-sage uppercase">
+          <Gift size={16} stroke-width={1.4} />
+          Подарочный сертификат
+        </p>
+        <h2 id="gift-heading" class="font-serif text-4xl tracking-wide sm:text-5xl">
+          Тишина в фирменной упаковке
+        </h2>
+        <p class="mt-5 text-sm leading-relaxed font-light text-cream/75 sm:text-base">
+          Электронный сертификат за 15 минут или печатный в конверте из хлопка. Номинал любой:
+          от одного сеанса до полного ритуала на двоих. Это одна из самых точных форм заботы,
+          которую можно подарить.
+        </p>
+      </div>
+      <div class="relative mt-10 lg:mt-0">
+        <button
+          type="button"
+          data-booking-open
+          data-service="SPA-ритуалы"
+          class="border border-cream/35 px-8 py-3.5 text-sm tracking-[0.18em] uppercase transition-all duration-300 hover:bg-cream hover:text-forest"
+        >
+          Оформить сертификат
+        </button>
+      </div>
+    </article>
+  </div>
+</section>

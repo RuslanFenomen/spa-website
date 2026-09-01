@@ -1,0 +1,25 @@
+---
+import CalendarHeart from "@lucide/astro/icons/calendar-heart";
+import { salon } from "../data/content";
+---
+
+<div
+  class="fixed inset-x-0 bottom-0 z-40 border-t border-taupe/10 bg-cream/95 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur-md md:hidden"
+>
+  <div class="flex items-center gap-3">
+    <a
+      href={salon.phoneHref}
+      class="flex-1 border border-taupe/20 px-3 py-3 text-center text-[0.7rem] tracking-[0.16em] text-taupe uppercase transition-all duration-300"
+    >
+      {salon.phoneDisplay}
+    </a>
+    <button
+      type="button"
+      data-booking-open
+      class="flex flex-[1.2] items-center justify-center gap-2 bg-forest px-3 py-3 text-[0.7rem] tracking-[0.16em] text-cream uppercase transition-all duration-300"
+    >
+      <CalendarHeart size={14} stroke-width={1.5} />
+      Быстрая запись
+    </button>
+  </div>
+</div>

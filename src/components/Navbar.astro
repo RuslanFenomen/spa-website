@@ -1,0 +1,104 @@
+---
+import Menu from "@lucide/astro/icons/menu";
+import X from "@lucide/astro/icons/x";
+import { navLinks, salon } from "../data/content";
+
+const path = Astro.url.pathname;
+const isActive = (href: string) =>
+  href === "/" ? path === "/" : path.startsWith(href);
+---
+
+<header
+  class="sticky top-0 z-50 border-b border-taupe/10 bg-cream/70 backdrop-blur-md"
+>
+  <div class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8">
+    <a href="/" class="font-serif text-xl tracking-[0.22em] text-forest uppercase">
+      {salon.name}
+    </a>
+
+    <nav class="hidden items-center gap-8 lg:flex" aria-label="Основная навигация">
+      {
+        navLinks.map((link) => (
+          <a
+            href={link.href}
+            class:list={[
+              "text-sm tracking-[0.16em] uppercase transition-all duration-300",
+              isActive(link.href)
+                ? "text-forest"
+                : "text-taupe-muted hover:text-forest",
+            ]}
+            aria-current={isActive(link.href) ? "page" : undefined}
+          >
+            {link.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="flex items-center gap-3">
+      <button
+        type="button"
+        data-booking-open
+        class="hidden border border-forest/20 px-5 py-2 text-xs tracking-[0.2em] text-forest uppercase transition-all duration-300 hover:border-forest hover:bg-forest hover:text-cream sm:inline-flex"
+      >
+        Записаться
+      </button>
+      <button
+        id="menu-toggle"
+        type="button"
+        class="inline-flex h-11 w-11 items-center justify-center text-forest lg:hidden"
+        aria-controls="mobile-nav"
+        aria-expanded="false"
+        aria-label="Открыть меню"
+      >
+        <span data-icon="open"><Menu size={22} stroke-width={1.4} /></span>
+        <span data-icon="close" class="hidden"><X size={22} stroke-width={1.4} /></span>
+      </button>
+    </div>
+  </div>
+
+  <div id="mobile-nav" class="hidden border-t border-taupe/10 bg-cream lg:hidden" hidden>
+    <nav class="flex flex-col gap-1 px-5 py-6" aria-label="Мобильная навигация">
+      {
+        navLinks.map((link) => (
+          <a
+            href={link.href}
+            class:list={[
+              "py-3 text-sm tracking-[0.18em] uppercase transition-all duration-300",
+              isActive(link.href) ? "text-forest" : "text-taupe-muted",
+            ]}
+          >
+            {link.label}
+          </a>
+        ))
+      }
+      <button
+        type="button"
+        data-booking-open
+        class="mt-4 border border-forest/25 px-5 py-3 text-xs tracking-[0.2em] text-forest uppercase"
+      >
+        Записаться
+      </button>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const toggle = document.getElementById("menu-toggle");
+  const panel = document.getElementById("mobile-nav");
+  if (toggle && panel) {
+    const openIcon = toggle.querySelector('[data-icon="open"]');
+    const closeIcon = toggle.querySelector('[data-icon="close"]');
+
+    toggle.addEventListener("click", () => {
+      const open = toggle.getAttribute("aria-expanded") === "true";
+      const next = !open;
+      toggle.setAttribute("aria-expanded", String(next));
+      toggle.setAttribute("aria-label", next ? "Закрыть меню" : "Открыть меню");
+      panel.hidden = !next;
+      panel.classList.toggle("hidden", !next);
+      openIcon?.classList.toggle("hidden", next);
+      closeIcon?.classList.toggle("hidden", !next);
+    });
+  }
+</script>

@@ -1,12 +1,39 @@
 ---
-import Hero from "../components/Hero.astro";
-import Services from "../components/Services.astro";
 import Layout from "../layouts/Layout.astro";
+import Hero from "../components/Hero.astro";
+import RitualQuiz from "../components/RitualQuiz.astro";
+import ServicesBento from "../components/ServicesBento.astro";
+import ShortAbout from "../components/ShortAbout.astro";
+import GiftCertificate from "../components/GiftCertificate.astro";
+import BookingForm from "../components/BookingForm.astro";
 ---
 
-<Layout>
+<Layout
+  title="Aura SPA — гармония души и тела"
+  description="Авторские методики массажа, премиальная органическая косметика и атмосфера абсолютного покоя."
+>
   <main id="main">
     <Hero />
-    <Services />
+    <RitualQuiz />
+    <ServicesBento />
+    <ShortAbout />
+    <GiftCertificate />
+    <section id="booking" class="bg-sand/30 px-5 py-20 sm:px-8 sm:py-28" aria-labelledby="booking-heading">
+      <div class="mx-auto grid max-w-7xl gap-12 lg:grid-cols-2 lg:items-start">
+        <div>
+          <p class="text-xs tracking-[0.36em] text-sage-deep uppercase">Запись</p>
+          <h2 id="booking-heading" class="mt-3 font-serif text-4xl tracking-wide text-forest sm:text-5xl">
+            Оставьте заявку — мы ответим в течение 15 минут
+          </h2>
+          <p class="mt-5 max-w-md text-sm leading-relaxed font-light text-taupe-muted">
+            Администратор подберёт мастера и кабинет. Если удобнее голосом — звоните, кнопка записи
+            всегда под рукой.
+          </p>
+        </div>
+        <div class="rounded-3xl border border-taupe/10 bg-cream p-6 sm:p-8">
+          <BookingForm idPrefix="home" />
+        </div>
+      </div>
+    </section>
   </main>
 </Layout>

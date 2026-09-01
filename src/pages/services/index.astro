@@ -1,0 +1,74 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { catalog } from "../../data/content";
+import ArrowRight from "@lucide/astro/icons/arrow-right";
+---
+
+<Layout
+  title="Услуги и прайс — Aura SPA"
+  description="Полный каталог массажа, стоун-терапии, SPA-ритуалов и ухода за лицом. Прозрачные цены."
+>
+  <main id="main">
+    <section class="border-b border-taupe/10 px-5 py-16 sm:px-8 sm:py-24">
+      <div class="mx-auto max-w-7xl">
+        <p class="text-xs tracking-[0.36em] text-sage-deep uppercase">Каталог</p>
+        <h1 class="mt-4 max-w-3xl font-serif text-5xl tracking-wide text-forest sm:text-6xl">
+          Услуги и прайс
+        </h1>
+        <p class="mt-6 max-w-xl text-base font-light text-taupe-muted">
+          Цены включают работу мастера, кабинета и органическую косметику. Чаевые не обязательны.
+        </p>
+      </div>
+    </section>
+
+    <section class="px-5 py-16 sm:px-8 sm:py-20">
+      <div class="mx-auto grid max-w-7xl gap-5 md:grid-cols-2">
+        {
+          catalog.map((item, index) => (
+            <article
+              id={item.slug}
+              class:list={[
+                "scroll-mt-28 rounded-3xl border border-taupe/10 p-7 transition-all duration-300 hover:border-sage/40 sm:p-9",
+                index % 3 === 0 ? "bg-sage/15 md:col-span-2" : "bg-cream",
+              ]}
+            >
+              <div class="flex flex-wrap items-start justify-between gap-4">
+                <div>
+                  <p class="text-[0.7rem] tracking-[0.28em] text-sage-deep uppercase">{item.category}</p>
+                  <h2 class="mt-2 font-serif text-3xl text-forest">{item.title}</h2>
+                </div>
+                <p class="font-serif text-2xl text-forest">
+                  {item.price}
+                  {"priceAlt" in item && item.priceAlt ? (
+                    <span class="text-lg text-taupe-muted"> / {item.priceAlt}</span>
+                  ) : null}
+                </p>
+              </div>
+              <p class="mt-4 max-w-2xl text-sm leading-relaxed font-light text-taupe-muted">
+                {item.description}
+              </p>
+              <div class="mt-6 flex items-center justify-between gap-4">
+                <p class="text-xs tracking-[0.16em] text-taupe-muted uppercase">{item.duration}</p>
+                <button
+                  type="button"
+                  data-booking-open
+                  data-service={
+                    ["Классический массаж", "Стоун-терапия", "SPA-ритуалы", "Лифтинг-массаж"].includes(
+                      item.title,
+                    )
+                      ? item.title
+                      : "SPA-ритуалы"
+                  }
+                  class="group inline-flex items-center gap-2 text-xs tracking-[0.18em] text-forest uppercase"
+                >
+                  Записаться
+                  <ArrowRight size={14} class="transition-all duration-300 group-hover:translate-x-1" />
+                </button>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+  </main>
+</Layout>

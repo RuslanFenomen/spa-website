@@ -1,0 +1,62 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { masters, salon } from "../data/content";
+---
+
+<Layout
+  title="О салоне — Aura SPA"
+  description="Философия Aura SPA, мастера и пространство тихой роскоши."
+>
+  <main id="main">
+    <section class="relative overflow-hidden bg-forest px-5 py-24 text-cream sm:px-8 sm:py-32">
+      <div class="animate-glow absolute top-10 right-10 h-56 w-56 rounded-full bg-sage/25 blur-3xl" aria-hidden="true"></div>
+      <div class="relative mx-auto max-w-7xl">
+        <p class="text-xs tracking-[0.36em] text-sage uppercase">О салоне</p>
+        <h1 class="mt-4 max-w-3xl font-serif text-5xl tracking-wide sm:text-6xl">
+          Место, где не нужно быть на виду
+        </h1>
+        <p class="mt-6 max-w-xl text-base font-light text-cream/75">
+          {salon.name} — камерный дом практик в центре города. Мы держим мало кабинетов,
+          чтобы сохранить тишину между сеансами.
+        </p>
+      </div>
+    </section>
+
+    <section class="px-5 py-20 sm:px-8">
+      <div class="mx-auto grid max-w-7xl gap-12 lg:grid-cols-2 lg:items-center">
+        <div>
+          <h2 class="font-serif text-4xl text-forest">Философия</h2>
+          <p class="mt-5 text-base leading-relaxed font-light text-taupe-muted">
+            Quiet luxury для нас — это качество касания, а не мрамор в коридоре. Масла без лишнего
+            парфюма, текстиль из натуральных волокон, протоколы, которые не меняются ради тренда.
+            Премиальный стандарт — когда гость не замечает сервис, потому что всё уже на месте.
+          </p>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="h-48 rounded-2xl bg-gradient-to-br from-sage/40 to-forest/30 sm:h-64" role="img" aria-label="Кабинет с мягким светом"></div>
+          <div class="mt-8 h-48 rounded-2xl bg-gradient-to-tl from-sand to-sage/30 sm:h-64" role="img" aria-label="Детали ритуала: камни и масло"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-sand/35 px-5 py-20 sm:px-8" aria-labelledby="masters-heading">
+      <div class="mx-auto max-w-7xl">
+        <h2 id="masters-heading" class="font-serif text-4xl text-forest">Мастера</h2>
+        <ul class="mt-10 grid gap-6 md:grid-cols-3">
+          {
+            masters.map((master) => (
+              <li>
+                <article class="h-full rounded-3xl border border-taupe/10 bg-cream p-7">
+                  <div class="mb-6 h-40 rounded-2xl bg-gradient-to-b from-sage/25 to-sand" role="img" aria-label={`Портрет: ${master.name}`}></div>
+                  <h3 class="font-serif text-2xl text-forest">{master.name}</h3>
+                  <p class="mt-1 text-xs tracking-[0.16em] text-sage-deep uppercase">{master.role}</p>
+                  <p class="mt-4 text-sm font-light text-taupe-muted">{master.bio}</p>
+                </article>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+  </main>
+</Layout>

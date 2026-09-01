@@ -1,0 +1,65 @@
+---
+import { quizOptions } from "../data/content";
+---
+
+<section class="px-5 py-6 sm:px-8" aria-labelledby="quiz-heading">
+  <div class="mx-auto max-w-7xl rounded-3xl border border-taupe/10 bg-sand/35 px-5 py-10 sm:px-10">
+    <p class="text-xs tracking-[0.36em] text-sage-deep uppercase">Подберите ваш ритуал</p>
+    <h2 id="quiz-heading" class="mt-3 font-serif text-3xl tracking-wide text-forest sm:text-4xl">
+      Что нужно телу сегодня?
+    </h2>
+    <div class="mt-8 flex flex-wrap gap-3" role="group" aria-label="Состояние">
+      {
+        quizOptions.map((option) => (
+          <button
+            type="button"
+            class="quiz-option border border-taupe/15 bg-cream px-4 py-2.5 text-sm text-taupe transition-all duration-300 hover:border-sage hover:bg-sage/15"
+            data-quiz={option.id}
+          >
+            {option.label}
+          </button>
+        ))
+      }
+    </div>
+    <div id="quiz-result" class="mt-8 hidden rounded-2xl border border-sage/30 bg-cream p-6" hidden>
+      <p id="quiz-title" class="font-serif text-2xl text-forest"></p>
+      <p id="quiz-text" class="mt-2 text-sm font-light text-taupe-muted"></p>
+      <div class="mt-5 flex flex-wrap gap-4">
+        <a id="quiz-link" href="/services" class="text-xs tracking-[0.18em] text-forest uppercase">
+          К услуге
+        </a>
+        <button
+          type="button"
+          data-booking-open
+          class="text-xs tracking-[0.18em] text-sage-deep uppercase"
+        >
+          Записаться
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script define:vars={{ quizOptions }}>
+  const result = document.getElementById("quiz-result");
+  const title = document.getElementById("quiz-title");
+  const text = document.getElementById("quiz-text");
+  const link = document.getElementById("quiz-link");
+
+  document.querySelectorAll(".quiz-option").forEach((button) => {
+    button.addEventListener("click", () => {
+      const id = button.getAttribute("data-quiz");
+      const match = quizOptions.find((item) => item.id === id);
+      if (!match || !result || !title || !text || !link) return;
+      title.textContent = match.resultTitle;
+      text.textContent = match.resultText;
+      link.setAttribute("href", match.href);
+      result.hidden = false;
+      result.classList.remove("hidden");
+      document.querySelectorAll(".quiz-option").forEach((el) => {
+        el.classList.remove("border-sage", "bg-sage/20");
+      });
+      button.classList.add("border-sage", "bg-sage/20");
+    });
+  });
+</script>
