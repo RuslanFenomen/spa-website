@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Cormorant Garamond", "Times New Roman", serif;
+  --font-sans: "Outfit", "Segoe UI", sans-serif;
+
+  --color-cream: #f6f1ea;
+  --color-sand: #d8cbb8;
+  --color-sand-deep: #c4b39a;
+  --color-sage: #8b9a7d;
+  --color-sage-deep: #6f7f64;
+  --color-slate: #2f3634;
+  --color-slate-muted: #5c6562;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-cream font-sans text-slate antialiased;
+}
